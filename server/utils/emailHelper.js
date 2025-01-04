@@ -6,8 +6,6 @@ const path = require("path");
 dotenv.config();
 
 const { SENDGRID_API_KEY } = process.env;
-console.log("sendgrid key: ", SENDGRID_API_KEY);
-
 
 function replaceContent(content, creds) {
     // creds: {name: "Sauditya", otp: 1234}
