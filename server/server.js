@@ -10,8 +10,9 @@ const PORT = process.env.PORT;
 
 // Setup
 const app = express();
-const clientBuildPath = path.join(__dirname, "../client/build");
 
+const clientBuildPath = path.join(__dirname, "../client/build");
+app.use(express.static(clientBuildPath));
 app.use(
     cors({
         origin: ["http://localhost:3000", "https://book-my-show-deployed-1.onrender.com"], // Allow only your frontend origin
@@ -72,7 +73,6 @@ app.use((req, res) =>
     res.status(404).json({ message: "page not found" })
 );
 
-app.use(express.static(clientBuildPath));
 app.get("*", (req, res) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
 });
