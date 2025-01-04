@@ -8,8 +8,7 @@ const cors = require("cors");
 require('dotenv').config();
 
 // Constants
-const PORT = 8082;
-const HOST = "localhost";
+const PORT = process.env.PORT;
 
 // Setup
 const app = express();
@@ -43,6 +42,7 @@ app.use(
         origin: "*", // Allow only your frontend origin
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
     })
 );
 
@@ -112,9 +112,7 @@ app.use((req, res) =>
     res.status(404).json({ message: "page not found" })
 );
 
-// Start the server.
-// URL: localhost:8082
 app.listen(PORT, () => {
-    console.log(`server is running on http://${HOST}:${PORT}`);
-});
+    console.log("Server is running on port PORT");
+})
 
