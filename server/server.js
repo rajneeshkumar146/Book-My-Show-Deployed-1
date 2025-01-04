@@ -17,6 +17,14 @@ app.use(express.static(clientBuildPath));
 app.get("*", (req, res) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
 });
+app.use(
+    cors({
+        origin: ["http://localhost:3000", "https://book-my-show-deployed-1.onrender.com"], // Allow only your frontend origin
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
+);
 
 app.use(express.json()); // Middleware
 
@@ -42,15 +50,6 @@ app.use(express.json()); // Middleware
 //         },
 //     })
 // );
-
-app.use(
-    cors({
-        origin: ["http://localhost:3000", "https://book-my-show-deployed-1.onrender.com"], // Allow only your frontend origin
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-    })
-);
 
 // Data base connection.
 const connectDb = require("./config/db");
