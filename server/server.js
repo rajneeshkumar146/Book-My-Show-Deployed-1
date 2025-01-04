@@ -2,6 +2,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require("express-mongo-sanitize");
+const cors = require("cors");
 
 // Load env Variables.
 require('dotenv').config();
@@ -13,6 +14,45 @@ const HOST = "localhost";
 // Setup
 const app = express();
 app.use(express.json()); // Middleware
+
+// // If getting csp:blocked error.
+// app.use(
+//     helmet({
+//         contentSecurityPolicy: {
+//             directives: {
+//                 defaultSrc: ["'self'"],
+//                 scriptSrc: [
+//                     "'self'",
+//                     "'unsafe-inline'",
+//                     "'unsafe-eval'",
+//                     "https://your-production-url.com", // Replace with your actual production URL
+//                 ],
+//                 styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+//                 imgSrc: ["'self'", "data:", "https://your-production-url.com"], // Replace with your actual production URL
+//                 connectSrc: ["'self'", "https://your-production-url.com"], // Your API domain
+//                 fontSrc: ["'self'", "https://fonts.gstatic.com"],
+//                 objectSrc: ["'none'"],
+//                 upgradeInsecureRequests: [],
+//             },
+//         },
+//     })
+// );
+
+app.use(
+    cors({
+        origin: "*", // Allow only your frontend origin
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
+
+const clientBuildPath = path.join(__dirname, "../client/build");
+console.log(clientBuildPath);
+
+app.use(express.static(clientBuildPath));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+});
 
 // Data base connection.
 const connectDb = require("./config/db");
@@ -49,7 +89,6 @@ app.use("/api/", apiLimiter);
 
 // Sanitize user input to prevent MongoDB Operator Injection
 app.use(mongoSanitize());
-
 
 // Global Variables
 const USER_ROUTER = require("./routes/userRouter");
