@@ -69,13 +69,14 @@ app.get("/", (req, res) =>
     res.status(201).send("Welcome to the home page.")
 );
 
-app.use((req, res) =>
-    res.status(404).json({ message: "page not found" })
-);
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(clientBuildPath, "index.html"));
 });
+
+app.use((req, res) =>
+    res.status(404).json({ message: "page not found" })
+);
 
 app.listen(PORT, () => {
     console.log("Server is running on port PORT");
