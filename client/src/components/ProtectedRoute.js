@@ -69,7 +69,7 @@ function ProtectedRoute({ children }) {
     try {
       dispatch(ShowLoading());
       const response = await GetCurrentUser();
-      console.log(response);
+      console.log("get-current-user:", response);
 
       dispatch(SetUser(response.data));
       dispatch(HideLoading());
@@ -83,6 +83,7 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
+      console.log("Token is found")
       getValidUser();
     } else {
       navigate("/login");
