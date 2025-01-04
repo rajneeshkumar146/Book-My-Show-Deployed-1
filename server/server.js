@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require("express-mongo-sanitize");
 const cors = require("cors");
+const path = require("path");
 
 // Load env Variables.
 require('dotenv').config();
