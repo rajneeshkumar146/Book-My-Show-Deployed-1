@@ -12,6 +12,14 @@ const PORT = process.env.PORT;
 
 // Setup
 const app = express();
+const clientBuildPath = path.join(__dirname, "../client/build");
+console.log(clientBuildPath);
+
+app.use(express.static(clientBuildPath));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+});
+
 app.use(express.json()); // Middleware
 
 // // If getting csp:blocked error.
@@ -39,20 +47,12 @@ app.use(express.json()); // Middleware
 
 app.use(
     cors({
-        origin: "*", // Allow only your frontend origin
+        origin: ["http://localhost:3000", "https://book-my-show-deployed-1.onrender.com"], // Allow only your frontend origin
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
     })
 );
-
-const clientBuildPath = path.join(__dirname, "../client/build");
-console.log(clientBuildPath);
-
-app.use(express.static(clientBuildPath));
-app.get("*", (req, res) => {
-    res.sendFile(path.join(clientBuildPath, "index.html"));
-});
 
 // Data base connection.
 const connectDb = require("./config/db");
